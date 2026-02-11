@@ -1,81 +1,173 @@
+```
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+  <q-layout view="lHh Lpr lFf" class="bg-dark text-white font-inter">
+    <q-header
+      class="bg-transparent text-white q-py-md"
+      :class="{ 'bg-dark-glass': scrollPosition > 50 }"
+    >
+      <q-toolbar class="container q-mx-auto">
+        <!-- Header Logo -->
+        <div class="row items-center cursor-pointer" @click="$router.push('/')">
+          <div class="text-h5 text-white text-weight-bold" style="letter-spacing: -0.5px">
+            DigiNex
+          </div>
+        </div>
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-space />
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div class="gt-sm q-gutter-x-md">
+          <q-btn flat no-caps label="Home" class="text-weight-medium" />
+          <q-btn flat no-caps label="Features" class="text-weight-medium" />
+          <q-btn flat no-caps label="About Us" class="text-weight-medium" />
+          <q-btn flat no-caps label="Contact" class="text-weight-medium" />
+        </div>
+
+        <div class="gt-xs q-ml-lg row q-gutter-x-sm">
+          <q-btn
+            flat
+            rounded
+            color="white"
+            label="Log In"
+            to="/login"
+            no-caps
+            class="text-weight-bold hover-grey"
+          />
+          <q-btn
+            unelevated
+            rounded
+            color="white"
+            text-color="dark"
+            label="Sign Up"
+            to="/register"
+            no-caps
+            class="q-px-lg text-weight-bold"
+          />
+        </div>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- Updated Compact Footer (Pure Black Modern Look) -->
+    <q-footer class="bg-black text-white q-py-lg border-top-dark">
+      <div class="container q-mx-auto q-px-md">
+        <div class="row q-col-gutter-lg items-center">
+          <div class="col-12 col-md-6">
+            <!-- Footer Branding -->
+            <div class="row items-center q-mb-sm">
+              <div class="text-h5 text-white text-weight-bold" style="letter-spacing: -0.5px">
+                DigiNex
+              </div>
+            </div>
+            <p class="text-caption q-mb-none text-grey-5" style="max-width: 400px">
+              100% Free & Open Source Tuition Management System.
+            </p>
+          </div>
+          <div class="col-12 col-md-6 text-md-right">
+            <div class="q-gutter-x-lg text-caption">
+              <a
+                href="#"
+                class="text-white hover-grey text-decoration-none transition-colors"
+                style="font-size: 13px"
+                >Documentation</a
+              >
+              <a
+                href="#"
+                class="text-white hover-grey text-decoration-none transition-colors"
+                style="font-size: 13px"
+                >Open Source</a
+              >
+              <a
+                href="#"
+                class="text-white hover-grey text-decoration-none transition-colors"
+                style="font-size: 13px"
+                >Support</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="q-mt-md text-center text-caption q-pt-md border-top-light text-grey-8">
+          © 2026 DigiNex Systems. All rights reserved.
+        </div>
+      </div>
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-]
+const scrollPosition = ref(0)
 
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+const updateScroll = () => {
+  scrollPosition.value = window.scrollY
 }
+
+onMounted(() => {
+  window.addEventListener('scroll', updateScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateScroll)
+})
 </script>
+
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bg-dark-glass {
+  background: rgba(10, 10, 10, 0.8) !important; // Using slightly darker for better contrast
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.border-top-dark {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.border-top-light {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tracking-wide {
+  letter-spacing: 0.5px;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.hover-white:hover {
+  color: white !important;
+}
+
+.bg-black {
+  background-color: #000000 !important;
+}
+
+.transition-colors {
+  transition: color 0.3s ease;
+}
+
+.hover-grey:hover {
+  color: #9e9e9e !important;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #bf953f; /* Fallback */
+}
+</style>

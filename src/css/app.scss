@@ -1,1 +1,25 @@
 // app global css in SCSS form
+
+.bg-blue-gradient {
+  background: linear-gradient(135deg, #1976d2 0%, #64b5f6 100%);
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.bg-purple-gradient {
+  background: linear-gradient(135deg, #7b1fa2 0%, #ba68c8 100%);
+  box-shadow: 0 4px 15px rgba(123, 31, 162, 0.3);
+}
+
+.bg-green-gradient {
+  background: linear-gradient(135deg, #388e3c 0%, #81c784 100%);
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+}
+
+.bg-orange-gradient {
+  background: linear-gradient(135deg, #f57c00 0%, #ffb74d 100%);
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+}
+
+.rounded-borders-15 {
+  border-radius: 12px;
+}
