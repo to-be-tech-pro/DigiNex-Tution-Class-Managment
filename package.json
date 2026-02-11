@@ -1,8 +1,8 @@
 {
   "name": "tution-manager",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "All in one package for Tution Class",
-  "productName": "DigyNex-Tution-Manager",
+  "productName": "DigiNex-Tution-Manager",
   "author": "to-be-tech-pro <tobeatechpro@gmail.com>",
   "type": "module",
   "private": true,
