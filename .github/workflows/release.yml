@@ -22,12 +22,12 @@ jobs:
           - os: windows-latest
             run: |
               npm install
-              npx quasar build -m electron --target win
+              npx quasar build -m electron
             asset_path: dist/electron/Packaged/*.exe
           - os: macos-latest
             run: |
               npm install
-              npx quasar build -m electron --target dmg
+              npx quasar build -m electron
             asset_path: dist/electron/Packaged/*.dmg
 
     runs-on: ${{ matrix.os }}
