@@ -1,6 +1,6 @@
 ```
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-dark text-white font-inter">
+  <q-layout view="lHh Lpr lFf" class="bg-primary text-white font-inter">
     <q-header
       class="bg-transparent text-white q-py-md"
       :class="{ 'bg-dark-glass': scrollPosition > 50 }"
@@ -9,7 +9,7 @@
         <!-- Header Logo -->
         <div class="row items-center cursor-pointer" @click="$router.push('/')">
           <div class="text-h5 text-white text-weight-bold" style="letter-spacing: -0.5px">
-            DigiNex
+            DigyNex
           </div>
         </div>
 
@@ -58,7 +58,7 @@
             <!-- Footer Branding -->
             <div class="row items-center q-mb-sm">
               <div class="text-h5 text-white text-weight-bold" style="letter-spacing: -0.5px">
-                DigiNex
+                DigyNex
               </div>
             </div>
             <p class="text-caption q-mb-none text-grey-5" style="max-width: 400px">
@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="q-mt-md text-center text-caption q-pt-md border-top-light text-grey-8">
-          © 2026 DigiNex Systems. All rights reserved.
+          © 2026 DigyNex Systems. All rights reserved.
         </div>
       </div>
     </q-footer>

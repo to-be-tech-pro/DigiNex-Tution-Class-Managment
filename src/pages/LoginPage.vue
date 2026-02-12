@@ -23,7 +23,7 @@
             <!-- Logo -->
             <div class="q-mb-xl cursor-pointer" @click="$router.push('/')">
               <div class="text-h4 text-white text-weight-bold" style="letter-spacing: -1px">
-                DigiNex
+                DigyNex
               </div>
               <div class="text-caption text-grey-5 q-mt-xs">Tuition Management System</div>
             </div>

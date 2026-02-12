@@ -3,10 +3,10 @@
     <!-- Welcome Header -->
     <div class="row items-center justify-between q-mb-xl">
       <div>
-        <h1 class="text-h4 text-weight-bolder text-grey-9 q-my-none">
-          Good Morning, <span class="text-primary">Admin!</span> <span class="text-h4">👋</span>
+        <h1 class="text-h4 text-weight-bolder text-primary q-my-none">
+          Good Morning, <span class="text-secondary">Admin!</span> <span class="text-h4">👋</span>
         </h1>
-        <p class="text-grey-5 text-subtitle1 q-mt-sm q-mb-none font-medium">
+        <p class="text-grey-6 text-subtitle1 q-mt-sm q-mb-none font-medium">
           Here's what's happening in your institute today.
         </p>
       </div>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="row items-center justify-between">
-              <div class="text-subtitle2 text-grey-5 font-medium text-uppercase tracking-wide">
+              <div class="text-subtitle2 text-grey-7 font-medium text-uppercase tracking-wide">
                 {{ stat.label }}
               </div>
               <div class="flex items-center">
@@ -62,7 +62,7 @@
                 >
                   {{ stat.trend > 0 ? '+' : '' }}{{ stat.trend }}%
                 </span>
-                <span class="text-caption text-grey-5">vs last month</span>
+                <span class="text-caption text-grey-6">vs last month</span>
               </div>
             </div>
           </q-card-section>
@@ -103,7 +103,7 @@
             <div class="row items-center justify-between q-mb-md">
               <div>
                 <div class="text-h6 text-weight-bold">Performance Overview</div>
-                <div class="text-caption text-grey-5">Revenue and enrollment growth over time</div>
+                <div class="text-caption text-grey-7">Revenue and enrollment growth over time</div>
               </div>
               <q-btn-toggle
                 v-model="chartTab"
@@ -146,7 +146,7 @@
           <q-card-section class="row items-center justify-between q-pa-lg">
             <div>
               <div class="text-h6 text-weight-bold">Recent Enrollments</div>
-              <div class="text-caption text-grey-5">Latest students joined this month</div>
+              <div class="text-caption text-grey-7">Latest students joined this month</div>
             </div>
             <q-btn
               flat
@@ -436,10 +436,6 @@ const enrollmentOptions = ref({
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
-.body--dark .stats-card {
-  background: #252a3e; /* Lighter, blue-ish grey for better contrast */
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
 
 .hover-scale {
   transition: transform 0.2s ease;
@@ -463,9 +459,7 @@ const enrollmentOptions = ref({
   border: 1px solid transparent;
   background: white; /* Default light */
 }
-.body--dark .hover-border {
-  background: #1e1e1e; /* Dark mode card */
-}
+
 .hover-border:hover {
   border-color: var(--q-primary);
   transform: translateY(-2px);

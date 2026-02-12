@@ -415,8 +415,8 @@ const exporting = ref('')
 const tab = ref('general')
 
 const general = ref({
-  name: 'DigiNex Institute',
-  email: 'admin@diginex.com',
+  name: 'DigyNex Institute',
+  email: 'admin@digynex.com',
   phone: '0771234567',
   currency: 'LKR',
   darkMode: false,

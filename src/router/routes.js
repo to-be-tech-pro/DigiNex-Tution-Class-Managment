@@ -83,12 +83,30 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/subscription',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SubscriptionPage.vue') }],
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/admin/approvals',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminProofsPage.vue') }],
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/forgot-password',
     component: () => import('pages/ForgotPasswordPage.vue'),
   },
   {
     path: '/reset-password',
     component: () => import('pages/ResetPasswordPage.vue'),
+  },
+  {
+    path: '/super-admin',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SuperAdminPage.vue') }],
+    meta: { requiresAuth: true },
   },
 
   // Always leave this as last one,

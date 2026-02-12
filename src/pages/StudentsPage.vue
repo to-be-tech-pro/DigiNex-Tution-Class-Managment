@@ -87,7 +87,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props" auto-width>
             <q-btn flat round dense icon="more_vert" color="grey-5">
-              <q-menu>
+              <q-menu class="text-dark">
                 <q-list style="min-width: 140px">
                   <q-item clickable v-close-popup @click="editStudent(props.row)">
                     <q-item-section>Edit Details</q-item-section>
@@ -269,7 +269,7 @@
               <div class="id-right">
                 <div>
                   <div class="text-h6 text-primary text-weight-bold" style="line-height: 1">
-                    DIGINEX
+                    DIGYNEX
                   </div>
                   <div class="text-caption text-grey-8" style="font-size: 10px">
                     Institute of Higher Education
@@ -306,9 +306,11 @@
 import { ref, onMounted } from 'vue'
 import { useQuasar, exportFile } from 'quasar'
 import { supabase } from 'src/boot/supabase'
+import { useRouter } from 'vue-router'
 import QrcodeVue from 'qrcode.vue'
 
 const $q = useQuasar()
+const router = useRouter()
 const editDialog = ref(false)
 const importDialog = ref(false)
 const idCardDialog = ref(false)
@@ -319,6 +321,7 @@ const loading = ref(false)
 const importFile = ref(null)
 const parsedStudents = ref([])
 const selectedStudentForID = ref(null)
+const planType = ref('free') // Default to free
 
 const openIdCard = (student) => {
   selectedStudentForID.value = student
@@ -363,11 +366,46 @@ const fetchStudents = async () => {
   }
 }
 
-onMounted(() => {
-  fetchStudents()
+onMounted(async () => {
+  await fetchStudents()
+  // Fetch Plan Type
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (user) {
+    const { data } = await supabase.from('profiles').select('plan_type').eq('id', user.id).single()
+    if (data) planType.value = data.plan_type || 'free'
+  }
 })
 
 const openAddDialog = () => {
+  // Check Limit
+  if (planType.value === 'free' && rows.value.length >= 10) {
+    $q.dialog({
+      title: 'Plan Limit Reached',
+      message:
+        'You have reached the maximum of 10 students allowed on the Free plan. Upgrade to Growth or Pro.',
+      ok: { label: 'Upgrade Now', color: 'secondary', push: true },
+      cancel: true,
+    }).onOk(() => {
+      router.push('/subscription')
+    })
+    return
+  }
+
+  if (planType.value === 'growth' && rows.value.length >= 100) {
+    $q.dialog({
+      title: 'Growth Limit Reached',
+      message:
+        'You have reached the maximum of 100 students allowed on the Growth plan. Upgrade to Pro for unlimited access.',
+      ok: { label: 'Upgrade to Pro', color: 'emerald', push: true },
+      cancel: true,
+    }).onOk(() => {
+      router.push('/subscription')
+    })
+    return
+  }
+
   editingRow.value = { status: 'Active' }
   isEditMode.value = false
   editDialog.value = true
@@ -385,6 +423,12 @@ const saveStudent = async () => {
     const studentData = { ...editingRow.value }
     // Remove ID if it's new (let DB generate it) or keep it for update
     if (!isEditMode.value) delete studentData.id
+
+    // Assign User ID for Multi-tenancy
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (user) studentData.user_id = user.id
 
     const { error } = await supabase.from('students').upsert(studentData).select()
 

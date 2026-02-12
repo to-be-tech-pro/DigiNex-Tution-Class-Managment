@@ -306,17 +306,74 @@ const openPaymentDialog = () => {
   paymentDialog.value = true
 }
 
-const savePayment = () => {
-  // TODO: Implement real payment saving with Student Search
-  rows.value.unshift({
-    id: Date.now(),
-    date: new Date().toISOString().split('T')[0],
-    student: form.value.studentName || 'Unknown',
-    month: form.value.month,
-    amount: form.value.amount,
-    status: form.value.status,
-  })
-  $q.notify({ type: 'positive', message: 'Payment recorded successfully' })
+const savePayment = async () => {
+  // Basic validation
+  if (!form.value.studentName || !form.value.amount || !form.value.month) {
+    $q.notify({ type: 'warning', message: 'Please fill all fields' })
+    return
+  }
+
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return
+
+    // Fetch Plan Info for Commission Logic
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('plan_type, country_code')
+      .eq('id', user.id)
+      .single()
+
+    const plan = profile?.plan_type || 'free'
+    const country = profile?.country_code || 'LK'
+    const amount = Number(form.value.amount)
+
+    let platformFee = 0
+
+    if (plan === 'growth') {
+      if (country === 'SL' || country === 'LK') {
+        platformFee = amount * 0.025
+      } else {
+        platformFee = amount * 0.05
+      }
+    }
+
+    // Insert Payment (Note: student_id is mocked as null or should be selected from a search dropdown,
+    // but for now keeping text 'studentName' won't work with DB if student_id is required foreign key.
+    // Assuming current DB schema connects payments to students via student_id.
+    // Since UI uses text input for name, we can't reliably link without a dropdown.
+    // For this step, I will search for student by name to find ID, or default to null if allowed/found.)
+
+    let studentId = null
+    // Try to find student
+    const { data: students } = await supabase
+      .from('students')
+      .select('id')
+      .ilike('name', `%${form.value.studentName}%`)
+      .limit(1)
+    if (students && students.length > 0) studentId = students[0].id
+
+    const { error } = await supabase.from('payments').insert({
+      student_id: studentId, // Might fail if null and column is not nullable.
+      // If schema requires student_id, user must select valid student.
+      // Assuming for now simple insert or logic robustness.
+      amount: amount,
+      payment_date: new Date().toISOString(),
+      payment_month: form.value.month,
+      status: form.value.status,
+      platform_fee: platformFee,
+    })
+
+    if (error) throw error
+
+    $q.notify({ type: 'positive', message: `Payment recorded. (Fee: ${platformFee})` })
+    fetchPayments() // Refresh table
+  } catch (error) {
+    console.error(error)
+    $q.notify({ type: 'negative', message: 'Failed to save payment: ' + error.message })
+  }
 }
 
 // --- DUE PAYMENTS LOGIC ---

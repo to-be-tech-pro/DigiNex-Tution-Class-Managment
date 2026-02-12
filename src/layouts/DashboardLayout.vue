@@ -1,7 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-1 text-grey-9 font-inter">
+  <q-layout view="lHh Lpr lFf" class="bg-slate-50 font-inter">
     <!-- Header -->
-    <q-header class="bg-white text-dark shadow-1 q-py-xs" height-hint="60">
+    <q-header class="bg-white text-primary shadow-1 q-py-xs" height-hint="60">
       <q-toolbar>
         <q-btn
           flat
@@ -13,8 +13,8 @@
           class="q-mr-sm text-grey-7"
         />
 
-        <q-toolbar-title class="text-weight-bold text-h6 text-grey-9 row items-center">
-          DigiNex
+        <q-toolbar-title class="text-weight-bold text-h6 text-primary row items-center">
+          DigyNex
           <span
             class="text-caption text-white bg-primary q-px-xs q-py-none q-ml-sm rounded-borders"
             style="font-size: 10px; padding: 2px 6px"
@@ -31,7 +31,7 @@
             outlined
             rounded
             v-model="search"
-            placeholder="Global Search (Students, Tutors)..."
+            placeholder="Global Search..."
             class="gt-xs q-mr-md"
             bg-color="grey-1"
             borderless
@@ -46,82 +46,36 @@
 
           <q-btn round flat color="grey-7" icon="notifications">
             <q-badge color="red" floating rounded mini />
-            <q-menu transition-show="jump-down" transition-hide="jump-up" :offset="[0, 10]">
-              <q-list style="min-width: 300px">
-                <div class="q-px-md q-py-sm border-bottom-light">
-                  <div class="text-weight-bold text-dark">Notifications</div>
-                </div>
-
-                <q-item clickable v-ripple class="q-py-md">
-                  <q-item-section avatar top>
-                    <q-avatar icon="person_add" color="blue-1" text-color="blue" size="md" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-bold text-dark text-subtitle2"
-                      >New Student Registration</q-item-label
-                    >
-                    <q-item-label caption class="text-grey-7"
-                      >Kasun Perera joined Grade 10 Math Class.</q-item-label
-                    >
-                    <q-item-label caption class="text-grey-5 q-mt-xs" style="font-size: 11px"
-                      >2 mins ago</q-item-label
-                    >
-                  </q-item-section>
-                </q-item>
-
-                <q-separator spaced inset />
-
-                <q-item clickable v-ripple class="q-py-md">
-                  <q-item-section avatar top>
-                    <q-avatar icon="payments" color="green-1" text-color="green" size="md" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-bold text-dark text-subtitle2"
-                      >Payment Received</q-item-label
-                    >
-                    <q-item-label caption class="text-grey-7"
-                      >Rs. 2,500 received from Amal Silva.</q-item-label
-                    >
-                    <q-item-label caption class="text-grey-5 q-mt-xs" style="font-size: 11px"
-                      >1 hour ago</q-item-label
-                    >
-                  </q-item-section>
-                </q-item>
-
-                <q-separator />
-
-                <q-item clickable v-close-popup class="text-center block">
-                  <q-item-section class="text-primary text-weight-bold cursor-pointer"
-                    >View All Notifications</q-item-section
-                  >
-                </q-item>
-              </q-list>
-            </q-menu>
           </q-btn>
 
           <q-btn round flat color="grey-7" icon="settings" to="/settings" />
 
-          <q-separator vertical inset class="q-mx-sm" />
+          <q-separator vertical inset class="q-mx-sm bg-grey-3" />
 
-          <q-btn flat no-caps class="q-ml-none rounded-borders text-grey-8 pl-1">
+          <q-btn flat no-caps class="q-ml-none rounded-borders text-dark pl-1">
             <q-avatar size="36px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
             <div class="text-left q-ml-sm gt-xs">
-              <div class="text-weight-bold text-subtitle2" style="line-height: 1.1">Admin User</div>
+              <div class="text-weight-bold text-subtitle2" style="line-height: 1.1">
+                {{ userEmail.split('@')[0] || 'User' }}
+              </div>
               <div class="text-caption text-grey-6" style="line-height: 1; font-size: 11px">
-                Super Admin
+                {{ isSuperAdmin ? 'Super Admin' : 'Administrator' }}
               </div>
             </div>
-
-            <!-- Profile Dropdown Menu -->
-            <q-menu transition-show="jump-down" transition-hide="jump-up" :offset="[0, 10]">
+            <q-menu
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[0, 10]"
+              class="bg-white border-light text-dark shadow-10"
+            >
               <q-list style="min-width: 200px">
                 <div class="q-px-md q-py-sm">
-                  <div class="text-weight-bold">Admin User</div>
-                  <div class="text-caption text-grey-6">admin@diginex.com</div>
+                  <div class="text-weight-bold">{{ userEmail.split('@')[0] || 'User' }}</div>
+                  <div class="text-caption text-grey-6">{{ userEmail || 'Loading...' }}</div>
                 </div>
-                <q-separator />
+                <q-separator class="bg-grey-2" />
 
                 <q-item clickable v-close-popup to="/profile" class="text-grey-8">
                   <q-item-section avatar>
@@ -137,7 +91,7 @@
                   <q-item-section>Settings</q-item-section>
                 </q-item>
 
-                <q-separator />
+                <q-separator class="bg-grey-2" />
 
                 <q-item
                   clickable
@@ -162,21 +116,21 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-white sidebar-shadow"
+      class="bg-primary text-white sidebar-shadow"
       :width="260"
     >
       <div class="q-pa-lg q-mb-xs flex flex-center">
         <div class="row items-center cursor-pointer" @click="$router.push('/dashboard')">
-          <div class="bg-primary text-white rounded-borders q-pa-xs q-mr-sm shadow-2">
+          <div class="bg-secondary text-white rounded-borders q-pa-xs q-mr-sm shadow-2">
             <q-icon name="school" size="24px" />
           </div>
-          <div class="text-h5 text-weight-bolder text-grey-9 tracking-tight font-heading">
-            DigiNex
+          <div class="text-h5 text-weight-bolder text-white tracking-tight font-heading">
+            DigyNex
           </div>
         </div>
       </div>
 
-      <q-list padding class="text-grey-7">
+      <q-list padding class="text-slate-300">
         <q-item-label
           header
           class="text-grey-5 text-uppercase text-weight-bold text-caption q-pl-lg q-mb-xs q-pt-sm"
@@ -191,8 +145,8 @@
           v-for="link in mainLinks"
           :key="link.title"
           :to="link.link"
-          active-class="bg-blue-1 text-primary active-border"
-          class="q-mx-md rounded-borders q-mb-sm transition-all text-grey-8"
+          active-class="active-dark-link"
+          class="q-mx-md rounded-borders q-mb-sm transition-all text-slate-400"
         >
           <q-item-section avatar style="min-width: 40px">
             <q-icon :name="link.icon" size="22px" />
@@ -202,11 +156,11 @@
           </q-item-section>
         </q-item>
 
-        <q-separator spaced="lg" class="q-mx-lg bg-grey-2" />
+        <q-separator spaced="lg" class="q-mx-lg bg-grey-8 opacity-20" />
 
         <q-item-label
           header
-          class="text-grey-6 text-uppercase text-weight-bold text-caption q-pl-lg q-mb-xs"
+          class="text-grey-5 text-uppercase text-weight-bold text-caption q-pl-lg q-mb-xs"
           style="font-size: 0.7rem; letter-spacing: 1px"
         >
           Management
@@ -218,8 +172,8 @@
           v-for="link in managementLinks"
           :key="link.title"
           :to="link.link"
-          active-class="bg-blue-1 text-primary active-border"
-          class="q-mx-md rounded-borders q-mb-sm transition-all text-grey-8"
+          active-class="active-dark-link"
+          class="q-mx-md rounded-borders q-mb-sm transition-all text-slate-400"
         >
           <q-item-section avatar style="min-width: 40px">
             <q-icon :name="link.icon" size="22px" />
@@ -229,20 +183,134 @@
           </q-item-section>
         </q-item>
 
-        <!-- Bottom Section -->
-        <div class="absolute-bottom q-pa-md bg-grey-1 ma-3 rounded-borders q-ma-md">
-          <div class="row items-center no-wrap">
-            <q-icon name="headset_mic" color="primary" size="24px" class="q-mr-sm" />
-            <div>
-              <div class="text-caption text-weight-bold text-grey-9">Need Help?</div>
-              <div class="text-caption text-grey-6" style="font-size: 10px">Contact Support</div>
+        <!-- Bottom Spacer to prevent overlap with absolute bottom -->
+        <div class="q-pb-xl"></div>
+        <div class="q-pb-lg"></div>
+
+        <!-- Bottom Section Wrapper -->
+        <div class="absolute-bottom bg-transparent q-pb-md">
+          <!-- Support Button -->
+          <div
+            class="q-mx-md q-mb-md glass-box rounded-borders q-pa-sm cursor-pointer hover-scale transition-all"
+            @click="supportDialog = true"
+          >
+            <div class="row items-center no-wrap justify-between">
+              <div class="row items-center">
+                <div class="bg-secondary-opacity q-pa-xs rounded-borders q-mr-sm">
+                  <q-icon name="headset_mic" color="secondary" size="20px" />
+                </div>
+                <div>
+                  <div class="text-caption text-weight-bold text-white" style="font-size: 13px">
+                    Need Help?
+                  </div>
+                  <div class="text-caption text-grey-5" style="font-size: 10px">
+                    Contact Support
+                  </div>
+                </div>
+              </div>
+              <q-icon name="chevron_right" color="grey-6" size="18px" />
             </div>
+          </div>
+
+          <!-- Powered By -->
+          <div class="text-center cursor-pointer q-mt-sm" @click="openSite">
+            <div
+              class="text-caption text-grey-7 q-mb-xs"
+              style="font-size: 9px; letter-spacing: 0.5px"
+            >
+              Powered by
+            </div>
+            <img
+              src="~assets/digynex-logo.png"
+              style="max-width: 120px; height: auto"
+              alt="DigyNex Systems"
+            />
           </div>
         </div>
       </q-list>
+      <!-- Spacer to prevent content overlap -->
+      <div style="height: 180px"></div>
     </q-drawer>
 
-    <q-page-container class="bg-grey-1" style="min-height: 100vh">
+    <!-- Support Dialog -->
+    <q-dialog v-model="supportDialog">
+      <q-card style="min-width: 350px" class="bg-white rounded-borders">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6 text-weight-bold text-primary">Contact Support</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup class="text-grey" />
+        </q-card-section>
+
+        <q-card-section class="q-pt-md">
+          <p class="text-grey-7 text-body2 q-mb-md">
+            Have a question or need assistance? Choose an option below.
+          </p>
+
+          <div class="q-gutter-y-sm">
+            <q-btn
+              outline
+              color="primary"
+              class="full-width text-left"
+              no-caps
+              align="left"
+              href="mailto:support@digynex.se"
+              target="_blank"
+            >
+              <template v-slot:default>
+                <div class="row items-center full-width">
+                  <q-icon name="email" class="q-mr-md" size="sm" />
+                  <div>
+                    <div class="text-weight-bold">Email Support</div>
+                    <div class="text-caption text-grey-6">response within 24h</div>
+                  </div>
+                </div>
+              </template>
+            </q-btn>
+
+            <q-btn
+              outline
+              color="green-7"
+              class="full-width text-left"
+              no-caps
+              align="left"
+              href="https://wa.me/"
+              target="_blank"
+            >
+              <template v-slot:default>
+                <div class="row items-center full-width">
+                  <q-icon name="chat" class="q-mr-md" size="sm" />
+                  <div>
+                    <div class="text-weight-bold">WhatsApp Chat</div>
+                    <div class="text-caption text-grey-6">Instant support</div>
+                  </div>
+                </div>
+              </template>
+            </q-btn>
+
+            <q-btn
+              unelevated
+              class="full-width text-left bg-gold-gradient text-white"
+              no-caps
+              align="left"
+              href="https://digynex.se"
+              target="_blank"
+            >
+              <template v-slot:default>
+                <div class="row items-center full-width">
+                  <q-icon name="language" class="q-mr-md" size="sm" />
+                  <div>
+                    <div class="text-weight-bold">Visit Website</div>
+                    <div class="text-caption text-white-opacity">digynex.se</div>
+                  </div>
+                </div>
+              </template>
+            </q-btn>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+    <q-page-container class="bg-slate-50" style="min-height: 100vh">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -253,13 +321,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import { supabase } from 'boot/supabase'
+
+const $q = useQuasar()
+// Hybrid Mode: Dark Sidebar, Light Content
+$q.dark.set(false)
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
 const router = useRouter()
+const userEmail = ref('')
+const userId = ref('') // Added for robust checking
+const supportDialog = ref(false)
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -267,15 +343,16 @@ const toggleLeftDrawer = () => {
 
 const handleSearch = () => {
   if (search.value.trim() === '') return
-
-  // For now, redirect to relevant page based on input or just global search
-  // Assuming simple implementation: redirect to Students page with query
   router.push({ path: '/students', query: { q: search.value } })
+}
+
+const openSite = () => {
+  window.open('https://digynex.se', '_blank')
 }
 
 const mainLinks = [{ title: 'Dashboard', icon: 'grid_view', link: '/dashboard' }]
 
-const managementLinks = [
+const allManagementLinks = [
   { title: 'Students', icon: 'school', link: '/students' },
   { title: 'Tutors', icon: 'co_present', link: '/tutors' },
   { title: 'Classes', icon: 'class', link: '/classes' },
@@ -283,8 +360,43 @@ const managementLinks = [
   { title: 'Payments', icon: 'payments', link: '/payments' },
   { title: 'Exams', icon: 'assignment', link: '/exams' },
   { title: 'Reports', icon: 'bar_chart', link: '/reports' },
-  { title: 'System Users', icon: 'manage_accounts', link: '/users' },
+  { title: 'Billing & Plan', icon: 'credit_card', link: '/subscription' },
+  {
+    title: 'System Users',
+    icon: 'manage_accounts',
+    link: '/super-admin',
+    superAdminOnly: true, // Custom flag
+  },
 ]
+
+const isSuperAdmin = computed(() => {
+  const email = userEmail.value?.toLowerCase() || ''
+  return (
+    email === 'amilawijayanthaperera@gmail.com' ||
+    email === 'amilawijayanthaperera858@gmail.com' ||
+    email === 'admin@digynex.com' ||
+    userId.value === '74736fbf-0700-4a0d-b797-84d0b0b3b554'
+  )
+})
+
+const managementLinks = computed(() => {
+  return allManagementLinks.filter((link) => {
+    if (link.superAdminOnly) {
+      return isSuperAdmin.value
+    }
+    return true
+  })
+})
+
+onMounted(async () => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (user) {
+    userEmail.value = user.email
+    userId.value = user.id
+  }
+})
 
 const handleLogout = async () => {
   await supabase.auth.signOut()
@@ -303,12 +415,13 @@ const handleLogout = async () => {
   letter-spacing: -0.5px;
 }
 
-/* Sidebar Active State Styling */
-.active-border {
+/* Sidebar Active State Styling (Dark Mode) */
+.active-dark-link {
   position: relative;
   font-weight: 600 !important;
-  background: #e3f2fd !important; /* Soft Blue */
-  color: #1976d2 !important;
+  background: rgba(16, 185, 129, 0.1) !important; /* Secondary/Emerald with low opacity */
+  color: #10b981 !important; /* Emerald Text */
+  border-right: 3px solid #10b981; /* Emerald Accent */
 }
 
 .transition-all {
@@ -316,8 +429,35 @@ const handleLogout = async () => {
 }
 
 .transition-all:hover {
-  background-color: #f5f5f5;
-  color: #1976d2;
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle white hover */
+  color: white;
+  padding-left: 20px;
+}
+
+/* Glass Box for Bottom Support Section */
+.glass-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #bf953f; /* Fallback */
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(to right, #bf953f, #b38728);
 }
 
 /* Smooth Page Transitions */
@@ -332,6 +472,6 @@ const handleLogout = async () => {
 }
 
 .border-bottom-light {
-  border-bottom: 1px solid #eaecf0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 </style>

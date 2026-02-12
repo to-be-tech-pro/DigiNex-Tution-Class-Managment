@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-dark text-white overflow-hidden">
+  <q-page class="bg-primary text-white overflow-hidden">
     <!-- Hero Section -->
     <section class="hero-section container q-px-md flex flex-center relative-position">
       <!-- Background Elements -->
@@ -11,10 +11,9 @@
         <div class="col-12 col-md-6 text-left hero-text q-pr-md-xl">
           <div class="badge-container q-mb-lg fade-in-up" style="animation-delay: 0.1s">
             <div
-              class="q-px-md q-py-xs rounded-full bg-glass text-caption text-uppercase tracking-wider border-glass row inline items-center text-accent"
+              class="q-px-md q-py-xs rounded-full bg-glass text-caption text-uppercase tracking-wider border-glass row inline items-center text-secondary"
             >
-              <q-icon name="code" class="q-mr-sm" size="14px" />
-              100% Free & Open Source
+              ✨ Start for Free. No Credit Card Needed.
             </div>
           </div>
 
@@ -108,7 +107,7 @@
     </section>
 
     <!-- Brands / Trusted By -->
-    <section class="q-py-lg q-py-md-xl bg-dark border-y-glass">
+    <section class="q-py-lg q-py-md-xl bg-primary border-y-glass">
       <div class="container q-mx-auto text-center">
         <div
           class="text-caption text-grey-7 tracking-widest q-mb-lg text-uppercase text-weight-medium"
@@ -155,7 +154,7 @@
         <div class="row items-center q-col-gutter-xl">
           <!-- Content -->
           <div class="col-12 col-md-6 order-last order-md-first">
-            <div class="text-overline text-accent tracking-widest q-mb-sm text-weight-bold">
+            <div class="text-overline text-secondary tracking-widest q-mb-sm text-weight-bold">
               ANALYTICS
             </div>
             <h2 class="text-h4 text-md-h3 text-weight-bold q-mb-md leading-tight">
@@ -169,15 +168,15 @@
 
             <div class="column q-gutter-y-sm q-mb-xl">
               <div class="row items-center">
-                <q-icon name="check_circle" color="accent" size="20px" class="q-mr-md" />
+                <q-icon name="check_circle" color="secondary" size="20px" class="q-mr-md" />
                 <span class="text-subtitle1 text-grey-4">Real-time financial reporting</span>
               </div>
               <div class="row items-center">
-                <q-icon name="check_circle" color="accent" size="20px" class="q-mr-md" />
+                <q-icon name="check_circle" color="secondary" size="20px" class="q-mr-md" />
                 <span class="text-subtitle1 text-grey-4">Automated attendance tracking</span>
               </div>
               <div class="row items-center">
-                <q-icon name="check_circle" color="accent" size="20px" class="q-mr-md" />
+                <q-icon name="check_circle" color="secondary" size="20px" class="q-mr-md" />
                 <span class="text-subtitle1 text-grey-4">Growth trend analysis</span>
               </div>
             </div>
@@ -327,7 +326,7 @@ const features = [
   &.bottom-left {
     bottom: -100px;
     left: -100px;
-    background: radial-gradient(circle, rgba($accent, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($secondary, 0.15) 0%, transparent 70%);
   }
 }
 
