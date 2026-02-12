@@ -248,11 +248,31 @@
 </template>
 
 <script setup>
-const openDownload = () => {
+import { onMounted } from 'vue'
+import axios from 'axios'
+
+const openDownload = (platform) => {
+  console.log('Download for:', platform) // Just to use the variable and avoid lint error, or remove it.
   // Point to GitHub Releases page where all artifacts are stored
   const repoUrl = 'https://github.com/to-be-tech-pro/DigiNex-Tution-Class-Managment/releases'
   window.open(repoUrl, '_blank')
 }
+
+// Client-Side Country Detection
+onMounted(async () => {
+  try {
+    // Check if we already have it to avoid spamming the free API
+    if (!localStorage.getItem('user_country')) {
+      const response = await axios.get('https://ip-api.com/json/')
+      if (response.data && response.data.countryCode) {
+        localStorage.setItem('user_country', response.data.countryCode)
+        console.log('Detected Country:', response.data.countryCode)
+      }
+    }
+  } catch (e) {
+    console.warn('Country detection failed, defaulting to Global/SL', e)
+  }
+})
 
 const stats = [
   { value: '500+', label: 'Institutions' },

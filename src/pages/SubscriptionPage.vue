@@ -250,6 +250,12 @@ const proFeatures = [
 ]
 
 onMounted(async () => {
+  // 1. Check LocalStorage for country (set by IndexPage)
+  const storedCountry = localStorage.getItem('user_country')
+  if (storedCountry) {
+    countryCode.value = storedCountry
+  }
+
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser()
@@ -263,13 +269,8 @@ onMounted(async () => {
 
     if (data) {
       currentPlan.value = data.plan_type || 'free'
+      // DB overrides local detection if set
       if (data.country_code) countryCode.value = data.country_code
-      else {
-        // If no code, we might want to prompt or default.
-        // For now, let's stick to default 'LK' (SL) as implied by 'DigyNex' context (Sri Lankan dev context usually),
-        // or we could assume International. The prompt says "Regional Pricing & Plan Logic".
-        // Let's rely on what's there.
-      }
     }
   }
 })
