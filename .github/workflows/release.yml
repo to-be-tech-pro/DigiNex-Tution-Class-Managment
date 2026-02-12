@@ -18,7 +18,7 @@ jobs:
             run: |
               npm install
               npx quasar build
-            asset_path: dist/spa
+            asset_path: dist/spa/**
           - os: windows-latest
             run: |
               npm install
@@ -44,6 +44,7 @@ jobs:
         run: ${{ matrix.run }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: Release
         uses: softprops/action-gh-release@v1
