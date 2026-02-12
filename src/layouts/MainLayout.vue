@@ -62,7 +62,7 @@
               </div>
             </div>
             <p class="text-caption q-mb-none text-grey-5" style="max-width: 400px">
-              100% Free & Open Source Tuition Management System.
+              The Most Advanced Tuition Management Platform.
             </p>
           </div>
           <div class="col-12 col-md-6 text-md-right">

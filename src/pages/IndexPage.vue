@@ -11,8 +11,10 @@
         <div class="col-12 col-md-6 text-left hero-text q-pr-md-xl">
           <div class="badge-container q-mb-lg fade-in-up" style="animation-delay: 0.1s">
             <div
-              class="q-px-md q-py-xs rounded-full bg-glass text-caption text-uppercase tracking-wider border-glass row inline items-center text-secondary"
+              class="q-px-lg q-py-sm rounded-borders bg-glass text-body1 text-weight-medium tracking-wide border-emerald text-white row inline items-center glow-pulse"
+              style="border-radius: 50px; border: 1px solid #10b981; backdrop-filter: blur(10px)"
             >
+              <q-icon name="stars" color="emerald" size="20px" class="q-mr-sm" />
               ✨ Start for Free. No Credit Card Needed.
             </div>
           </div>
@@ -34,8 +36,8 @@
           </p>
 
           <div class="column q-gutter-y-md fade-in-up" style="animation-delay: 0.4s">
-            <!-- Primary Web Action -->
-            <div>
+            <!-- Primary Web Actions -->
+            <div class="row q-gutter-md items-center">
               <q-btn
                 unelevated
                 size="lg"
@@ -47,10 +49,24 @@
                 no-caps
                 class="q-px-xl text-weight-bold btn-hover-lift shadow-10"
               />
+              <!-- 'Watch Demo' Hidden for now until video is ready
+              <q-btn
+                outline
+                rounded
+                size="lg"
+                color="emerald"
+                text-color="white"
+                label="Watch Demo"
+                icon="play_circle_outline"
+                no-caps
+                class="q-px-xl text-weight-bold btn-hover-lift text-emerald-btn"
+                @click="openVideo"
+              />
+              -->
             </div>
 
             <!-- Download Actions -->
-            <div class="row q-gutter-md items-center">
+            <div class="row q-gutter-md items-center q-mt-sm">
               <span class="text-grey-5 text-caption text-uppercase tracking-wide q-mr-sm"
                 >Download App:</span
               >
@@ -92,6 +108,7 @@
             <!-- Floating Elements for depth -->
             <div
               class="float-card bg-dark border-glass q-pa-md absolute-bottom-left shadow-10 rounded-lg lt-md-hide"
+              :class="{ dimmed: showVideo }"
             >
               <div class="row items-center q-gutter-md">
                 <q-avatar color="accent" text-color="white" icon="analytics" size="md" />
@@ -188,6 +205,7 @@
               label="Explore Reporting"
               icon-right="arrow_forward"
               class="text-weight-bold q-px-none hover-accent"
+              to="/reports"
             />
           </div>
 
@@ -222,19 +240,19 @@
         <div class="row q-col-gutter-lg">
           <div class="col-12 col-md-4" v-for="(feature, idx) in features" :key="idx">
             <div
-              class="feature-card q-pa-lg rounded-borders bg-secondary full-height hover-effect text-left relative-position overflow-hidden"
+              class="feature-card q-pa-lg rounded-borders full-height hover-effect text-left relative-position overflow-hidden border-top-emerald"
             >
               <div class="absolute-top-right q-ma-md opacity-10">
-                <q-icon :name="feature.icon" size="80px" color="white" />
+                <q-icon :name="feature.icon" size="80px" class="text-emerald" />
               </div>
               <div class="q-mb-md q-mb-md-lg relative-position z-top">
-                <q-icon :name="feature.icon" size="28px" class="text-white" />
+                <q-icon :name="feature.icon" size="28px" class="text-emerald" />
               </div>
               <h3 class="text-h6 text-weight-bold q-mb-sm text-white relative-position z-top">
                 {{ feature.title }}
               </h3>
               <p
-                class="text-grey-5 text-caption q-mb-none relative-position z-top"
+                class="text-grey-3 text-caption q-mb-none relative-position z-top"
                 style="line-height: 1.6"
               >
                 {{ feature.desc }}
@@ -244,12 +262,49 @@
         </div>
       </div>
     </section>
+
+    <!-- Video Modal Hidden
+    <q-dialog
+      v-model="showVideo"
+      backdrop-filter="blur(8px) brightness(60%)"
+      class="z-top-force"
+      transition-show="scale"
+      transition-hide="scale"
+      @hide="stopVideo"
+    >
+      <q-card style="width: 800px; max-width: 90vw" class="bg-black text-white">
+        <q-toolbar>
+          <q-toolbar-title class="text-weight-bold font-inter">Platform Demo</q-toolbar-title>
+          <q-btn flat round dense icon="close" v-close-popup />
+        </q-toolbar>
+
+        <q-card-section class="q-pa-none relative-position">
+          <q-video v-if="videoUrl" :ratio="16 / 9" :src="videoUrl" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    -->
   </q-page>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 import axios from 'axios'
+
+// const showVideo = ref(false)
+// const videoUrl = ref(null)
+
+/*
+const openVideo = () => {
+  // SaaS Level Fix: Autoplay logic with mute for browser policy compliance
+  videoUrl.value = 'https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1&mute=1&playsinline=1'
+  showVideo.value = true
+}
+
+const stopVideo = () => {
+  videoUrl.value = null
+}
+*/
 
 const openDownload = (platform) => {
   console.log('Download for:', platform) // Just to use the variable and avoid lint error, or remove it.
@@ -316,6 +371,44 @@ const features = [
 </script>
 
 <style lang="scss" scoped>
+// Emerald Colors
+.text-emerald {
+  color: #10b981 !important;
+}
+
+.border-top-emerald {
+  border-top: 4px solid #10b981 !important;
+}
+
+.glow-pulse {
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-emerald 2s infinite;
+}
+
+@keyframes pulse-emerald {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.text-emerald-btn {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+
+  &:hover {
+    background: rgba(16, 185, 129, 0.1) !important;
+  }
+}
+
 // Hero & Layout
 .hero-section {
   min-height: 90vh;
@@ -381,6 +474,17 @@ const features = [
   }
 }
 
+.dimmed {
+  opacity: 0.1;
+  pointer-events: none;
+  filter: blur(10px);
+  transition: all 0.5s ease;
+}
+
+.z-top-force {
+  z-index: 9999 !important;
+}
+
 .float-card {
   left: -30px;
   bottom: 40px;
@@ -412,7 +516,7 @@ const features = [
 
 // Features & Cards
 .feature-card {
-  background: #111111;
+  background: #0f172a; // Deep Blue / Slate
   transition:
     transform 0.3s ease,
     background 0.3s ease;
@@ -421,7 +525,7 @@ const features = [
 
   &:hover {
     transform: translateY(-5px);
-    background: #181818;
+    background: #1e293b;
     border-color: rgba(255, 255, 255, 0.1);
   }
 }
