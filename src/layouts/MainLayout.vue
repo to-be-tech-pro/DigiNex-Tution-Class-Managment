@@ -73,12 +73,7 @@
                 style="font-size: 13px"
                 >Documentation</a
               >
-              <a
-                href="#"
-                class="text-white hover-grey text-decoration-none transition-colors"
-                style="font-size: 13px"
-                >Open Source</a
-              >
+
               <a
                 href="#"
                 class="text-white hover-grey text-decoration-none transition-colors"

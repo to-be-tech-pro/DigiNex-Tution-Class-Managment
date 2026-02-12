@@ -107,7 +107,7 @@ body,
 }
 
 // Hybrid Theme Background
-.bg-slate-50 {
+body:not(.body--dark) .bg-slate-50 {
   background-color: #f8fafc !important;
 }
 

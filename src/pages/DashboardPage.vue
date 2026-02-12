@@ -3,8 +3,8 @@
     <!-- Welcome Header -->
     <div class="row items-center justify-between q-mb-xl">
       <div>
-        <h1 class="text-h4 text-weight-bolder text-primary q-my-none">
-          Good Morning, <span class="text-secondary">Admin!</span> <span class="text-h4">👋</span>
+        <h1 class="text-h4 text-weight-bolder text-secondary q-my-none">
+          Good Morning, Admin! <span class="text-h4">👋</span>
         </h1>
         <p class="text-grey-6 text-subtitle1 q-mt-sm q-mb-none font-medium">
           Here's what's happening in your institute today.
@@ -47,7 +47,12 @@
               </div>
 
               <div class="text-right">
-                <div class="text-h4 text-weight-bolder">{{ stat.value }}</div>
+                <div class="text-h4 text-weight-bolder">
+                  <span v-if="stat.currency" class="text-h6 text-grey-5 q-mr-xs">{{
+                    stat.currency
+                  }}</span>
+                  {{ stat.value }}
+                </div>
               </div>
             </div>
 
@@ -207,45 +212,56 @@
       <div class="col-12 col-lg-4">
         <!-- Next Class Card (Featured) -->
         <q-card
-          class="no-shadow border-radius-lg bg-gradient-primary text-white q-mb-lg relative-position overflow-hidden"
+          class="no-shadow border-radius-lg bg-dark text-white q-mb-lg relative-position overflow-hidden border-secondary-left"
         >
-          <!-- Decorative Circles -->
+          <!-- Decorative Circles (Darker for subtle effect) -->
+
           <div
-            class="absolute-top-right bg-white opacity-10 rounded-full"
-            style="width: 150px; height: 150px; right: -50px; top: -50px"
-          ></div>
-          <div
-            class="absolute-bottom-left bg-white opacity-10 rounded-full"
+            class="absolute-bottom-left bg-white opacity-5 rounded-full"
             style="width: 100px; height: 100px; left: -20px; bottom: -20px"
           ></div>
 
           <q-card-section class="q-pa-lg relative-position" style="z-index: 10">
             <div class="row items-center justify-between q-mb-md">
               <q-badge
-                color="white"
-                text-color="primary"
+                color="secondary"
+                text-color="white"
                 class="q-px-sm q-py-xs text-weight-bold shadow-1"
               >
                 Upcoming Class
               </q-badge>
-              <q-icon name="more_horiz" class="cursor-pointer opacity-80" size="24px" />
+              <q-btn flat round dense icon="more_horiz" class="text-secondary opacity-80">
+                <q-menu auto-close>
+                  <q-list style="min-width: 150px">
+                    <q-item clickable>
+                      <q-item-section>View Details</q-item-section>
+                    </q-item>
+                    <q-item clickable class="text-red">
+                      <q-item-section>Cancel Class</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </div>
 
-            <div class="text-h4 text-weight-bolder q-mb-xs">Physics 101</div>
-            <div class="text-subtitle1 opacity-90 q-mb-lg font-medium">Dr. S. Perera • Hall A</div>
+            <div class="text-h4 text-weight-bolder q-mb-xs text-secondary">Physics 101</div>
+            <div class="text-subtitle1 opacity-90 q-mb-lg font-medium text-grey-4">
+              Dr. S. Perera • Hall A
+            </div>
 
             <div class="row items-end justify-between">
               <div>
-                <div class="text-h3 font-mono text-weight-bold">10:30</div>
-                <div class="text-subtitle2 opacity-80">AM Today</div>
+                <div class="text-h3 font-mono text-weight-bold">{{ formattedTime12 }}</div>
+                <div class="text-subtitle2 opacity-80 text-secondary">{{ currentPeriod }}</div>
               </div>
               <q-btn
                 round
-                color="white"
-                text-color="primary"
+                color="secondary"
+                text-color="white"
                 icon="arrow_forward"
                 unelevated
                 class="shadow-2"
+                to="/classes"
               />
             </div>
           </q-card-section>
@@ -289,12 +305,64 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
+const now = ref(new Date())
+let timeInterval
+
+const updateTime = () => {
+  now.value = new Date()
+}
+
+onMounted(() => {
+  timeInterval = setInterval(updateTime, 1000)
+})
+
+onUnmounted(() => {
+  if (timeInterval) clearInterval(timeInterval)
+})
+
+const currentPeriod = computed(() => {
+  // Simple check for AM/PM display if desired, or just "Today"
+  // User had "AM Today". Let's try to match 12h format if that was the intent,
+  // But standard digital clocks are often 24h or User preference.
+  // The design showed "10:30" and "AM Today".
+  // Let's stick to 12h format for the big numbers and AM/PM below.
+  const hour = now.value.getHours()
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  return `${ampm} Today`
+})
+
+// Update currentTime logic to return 12h format numbers without AM/PM
+const formattedTime12 = computed(() => {
+  let hours = now.value.getHours()
+  const minutes = now.value.getMinutes().toString().padStart(2, '0')
+  hours = hours % 12
+  hours = hours ? hours : 12 // the hour '0' should be '12'
+  return `${hours}:${minutes}`
+})
+// Override previous computed to use this one for the template
+// Renaming strictly for the ReplacementChunk to match variable names
+
+const getCurrencyByTimezone = () => {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  if (timeZone.includes('Colombo')) return 'LKR'
+  if (timeZone.includes('Stockholm')) return 'Kr' // SEK usually displayed as 'kr' or 'SEK'
+  return 'USD'
+}
+
+const currencySymbol = ref(getCurrencyByTimezone())
 const stats = ref([
   { label: 'Total Students', value: '1,240', icon: 'school', color: 'blue', trend: 12 },
   { label: 'Total Tutors', value: '45', icon: 'person', color: 'purple', trend: 5 },
-  { label: 'Monthly Revenue', value: 'LKR 425k', icon: 'payments', color: 'green', trend: 8 },
+  {
+    label: 'Monthly Revenue',
+    value: '425k', // Just the number
+    currency: currencySymbol.value, // Separate currency for styling
+    icon: 'payments',
+    color: 'green',
+    trend: 8,
+  },
   { label: 'New Inquiries', value: '18', icon: 'pending_actions', color: 'orange', trend: -2 },
 ])
 
@@ -422,6 +490,10 @@ const enrollmentOptions = ref({
 .rounded-borders-md {
   border-radius: 12px;
 }
+.opacity-5 {
+  opacity: 0.05;
+}
+
 .opacity-10 {
   opacity: 0.1;
 }
@@ -474,5 +546,9 @@ const enrollmentOptions = ref({
 }
 .font-mono {
   font-family: 'Roboto Mono', monospace;
+}
+
+.border-secondary-left {
+  border-left: 4px solid #10b981;
 }
 </style>

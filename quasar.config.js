@@ -206,7 +206,22 @@ export default defineConfig((ctx) => {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'tution-manager',
+        appId: 'com.digynex.manager',
+        productName: 'DigiNex Tution Manager',
+        copyright: 'Copyright © 2026 DigiNex Systems',
+
+        win: {
+          target: 'nsis',
+          icon: 'src-electron/icons/icon.ico',
+        },
+
+        nsis: {
+          oneClick: false,
+          allowToChangeInstallationDirectory: true,
+          createDesktopShortcut: true,
+          createStartMenuShortcut: true,
+          shortcutName: 'DigiNex Manager',
+        },
       },
     },
 

@@ -13,7 +13,7 @@
           class="q-mr-sm text-grey-7"
         />
 
-        <q-toolbar-title class="text-weight-bold text-h6 text-primary row items-center">
+        <q-toolbar-title class="text-weight-bold text-h6 text-gold-gradient row items-center">
           DigyNex
           <span
             class="text-caption text-white bg-primary q-px-xs q-py-none q-ml-sm rounded-borders"
@@ -45,7 +45,21 @@
           </q-input>
 
           <q-btn round flat color="grey-7" icon="notifications">
-            <q-badge color="red" floating rounded mini />
+            <q-badge color="red" floating rounded mini v-if="notifications.length > 0" />
+            <q-menu>
+              <q-list style="min-width: 250px">
+                <q-item-label header>Notifications</q-item-label>
+                <div v-if="notifications.length === 0" class="text-center q-pa-md text-grey">
+                  No new notifications
+                </div>
+                <q-item v-for="notif in notifications" :key="notif.id" clickable v-close-popup>
+                  <q-item-section>
+                    <q-item-label>{{ notif.title }}</q-item-label>
+                    <q-item-label caption>{{ notif.message }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </q-btn>
 
           <q-btn round flat color="grey-7" icon="settings" to="/settings" />
@@ -112,19 +126,10 @@
     </q-header>
 
     <!-- Sidebar (Drawer) -->
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      class="bg-primary text-white sidebar-shadow"
-      :width="260"
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260">
       <div class="q-pa-lg q-mb-xs flex flex-center">
         <div class="row items-center cursor-pointer" @click="$router.push('/dashboard')">
-          <div class="bg-secondary text-white rounded-borders q-pa-xs q-mr-sm shadow-2">
-            <q-icon name="school" size="24px" />
-          </div>
-          <div class="text-h5 text-weight-bolder text-white tracking-tight font-heading">
+          <div class="text-h5 text-weight-bolder text-gold-gradient tracking-tight font-heading">
             DigyNex
           </div>
         </div>
@@ -220,11 +225,7 @@
             >
               Powered by
             </div>
-            <img
-              src="~assets/digynex-logo.png"
-              style="max-width: 120px; height: auto"
-              alt="DigyNex Systems"
-            />
+            <div class="text-h6 text-weight-bolder text-gold-gradient font-heading">DigyNex</div>
           </div>
         </div>
       </q-list>
@@ -328,7 +329,7 @@ import { supabase } from 'boot/supabase'
 
 const $q = useQuasar()
 // Hybrid Mode: Dark Sidebar, Light Content
-$q.dark.set(false)
+$q.dark.set(true)
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
@@ -336,6 +337,7 @@ const router = useRouter()
 const userEmail = ref('')
 const userId = ref('') // Added for robust checking
 const supportDialog = ref(false)
+const notifications = ref([])
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value

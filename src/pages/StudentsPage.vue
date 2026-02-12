@@ -303,14 +303,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useQuasar, exportFile } from 'quasar'
 import { supabase } from 'src/boot/supabase'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import QrcodeVue from 'qrcode.vue'
 
 const $q = useQuasar()
 const router = useRouter()
+const route = useRoute()
 const editDialog = ref(false)
 const importDialog = ref(false)
 const idCardDialog = ref(false)
@@ -352,10 +353,15 @@ const rows = ref([])
 const fetchStudents = async () => {
   loading.value = true
   try {
-    const { data, error } = await supabase
-      .from('students')
-      .select('*')
-      .order('created_at', { ascending: false })
+    let query = supabase.from('students').select('*').order('created_at', { ascending: false })
+
+    // Search Filter
+    const searchQuery = route.query.q
+    if (searchQuery) {
+      query = query.ilike('name', `%${searchQuery}%`)
+    }
+
+    const { data, error } = await query
 
     if (error) throw error
     rows.value = data
@@ -377,6 +383,13 @@ onMounted(async () => {
     if (data) planType.value = data.plan_type || 'free'
   }
 })
+
+watch(
+  () => route.query.q,
+  async () => {
+    await fetchStudents()
+  },
+)
 
 const openAddDialog = () => {
   // Check Limit
