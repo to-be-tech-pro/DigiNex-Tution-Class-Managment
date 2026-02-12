@@ -210,6 +210,14 @@ export default defineConfig((ctx) => {
         productName: 'DigiNex Tution Manager',
         copyright: 'Copyright © 2026 DigiNex Systems',
 
+        mac: {
+          target: 'dmg',
+          identity: null, // Disable signing to avoid CI errors without certs
+        },
+        dmg: {
+          title: 'DigiNex Installer',
+          icon: 'src-electron/icons/icon.icns',
+        },
         win: {
           target: 'nsis',
           icon: 'src-electron/icons/icon.ico',
