@@ -16,17 +16,17 @@ jobs:
         include:
           - os: ubuntu-latest
             run: |
-              npm ci
+              npm install
               npx quasar build
             asset_path: dist/spa
           - os: windows-latest
             run: |
-              npm ci
+              npm install
               npx quasar build -m electron --target win
             asset_path: dist/electron/Packaged/*.exe
           - os: macos-latest
             run: |
-              npm ci
+              npm install
               npx quasar build -m electron --target dmg
             asset_path: dist/electron/Packaged/*.dmg
 
