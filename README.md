@@ -2,7 +2,7 @@
   <img src="https://via.placeholder.com/150x150.png?text=DigiNex" width="120" />
 </p>
 
-<h1 align="center">DigiNex Tution Manager</h1>
+<h1 align="center">DigyNex Tution Manager</h1>
 
 <p align="center">
   Master Your Classroom.
