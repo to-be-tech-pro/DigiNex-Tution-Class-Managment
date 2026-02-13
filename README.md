@@ -1,43 +1,84 @@
-# DigyNex-Tution-Manager (tution-manager)
+<p align="center">
+  <img src="https://via.placeholder.com/150x150.png?text=DigiNex" width="120" />
+</p>
 
-All in one package for Tution Class
+<h1 align="center">DigiNex Tution Manager</h1>
 
-## Install the dependencies
+<p align="center">
+  Master Your Classroom.
+</p>
 
-```bash
-yarn
-# or
-npm install
-```
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/to-be-tech-pro/DigiNex-Tution-Class-Managment?style=for-the-badge">
+  <img src="https://img.shields.io/github/downloads/to-be-tech-pro/DigiNex-Tution-Class-Managment/total?style=for-the-badge">
+  <img src="https://img.shields.io/github/license/to-be-tech-pro/DigiNex-Tution-Class-Managment?style=for-the-badge">
+</p>
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+---
 
-```bash
-quasar dev
-```
+## 🚀 Download
 
-### Lint the files
+### 🪟 Windows (x64)
+👉 **[Download for Windows](https://github.com/to-be-tech-pro/DigiNex-Tution-Class-Managment/releases/latest)**
 
-```bash
-yarn lint
-# or
-npm run lint
-```
+### 🍎 macOS
+👉 **[Download for macOS](https://github.com/to-be-tech-pro/DigiNex-Tution-Class-Managment/releases/latest)**
 
-### Format the files
+---
 
-```bash
-yarn format
-# or
-npm run format
-```
+## ✨ Features
 
-### Build the app for production
+- 📚 Student Management  
+- 💳 Payment Tracking  
+- 📅 Class Scheduling  
+- 📊 Analytics & Reports  
+- ⚡ High Performance Desktop App  
+- 🔐 Secure Local Data Handling  
 
-```bash
-quasar build
-```
+---
 
-### Customize the configuration
+## 📸 Screenshots
 
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+> Add screenshots inside a folder named `screenshots` in your repo.
+
+Example:
+
+<p align="center">
+  <img src="./screenshots/dashboard.png" width="800"/>
+</p>
+
+<p align="center">
+  <img src="./screenshots/students.png" width="800"/>
+</p>
+
+---
+
+## 🛠 Built With
+
+- Quasar Framework  
+- Electron  
+- Vue.js  
+- GitHub Actions (CI/CD)  
+
+---
+
+## 📦 Installation Guide
+
+### Windows
+1. Download the `.exe` file
+2. Run the installer
+3. Follow setup instructions
+
+### macOS
+1. Download the `.dmg` file
+2. Drag the app to Applications
+3. If blocked:
+   - Open System Settings  
+   - Go to Privacy & Security  
+   - Click **Open Anyway**
+
+---
+
+## 📄 License
+
+MIT License © 2026 DigiNex Systems
