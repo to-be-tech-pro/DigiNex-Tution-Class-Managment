@@ -4,6 +4,7 @@
     <q-header
       class="bg-transparent text-white q-py-md"
       :class="{ 'bg-dark-glass': scrollPosition > 50 }"
+      style="z-index: 5000"
     >
       <q-toolbar class="container q-mx-auto">
         <!-- Header Logo -->
@@ -51,7 +52,7 @@
     </q-page-container>
 
     <!-- Updated Compact Footer (Pure Black Modern Look) -->
-    <q-footer class="bg-black text-white q-py-lg border-top-dark">
+    <q-footer class="bg-black text-white q-py-lg border-top-dark" style="z-index: 5000">
       <div class="container q-mx-auto q-px-md">
         <div class="row q-col-gutter-lg items-center">
           <div class="col-12 col-md-6">
