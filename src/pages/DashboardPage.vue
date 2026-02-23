@@ -344,21 +344,17 @@ const formattedTime12 = computed(() => {
 // Override previous computed to use this one for the template
 // Renaming strictly for the ReplacementChunk to match variable names
 
-const getCurrencyByTimezone = () => {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-  if (timeZone.includes('Colombo')) return 'LKR'
-  if (timeZone.includes('Stockholm')) return 'Kr' // SEK usually displayed as 'kr' or 'SEK'
-  return 'USD'
-}
+import { useCurrencyStore } from 'stores/currency'
 
-const currencySymbol = ref(getCurrencyByTimezone())
+const currencyStore = useCurrencyStore()
+
 const stats = ref([
   { label: 'Total Students', value: '1,240', icon: 'school', color: 'blue', trend: 12 },
   { label: 'Total Tutors', value: '45', icon: 'person', color: 'purple', trend: 5 },
   {
     label: 'Monthly Revenue',
     value: '425k', // Just the number
-    currency: currencySymbol.value, // Separate currency for styling
+    currency: currencyStore.currency, // Separate currency for styling
     icon: 'payments',
     color: 'green',
     trend: 8,
@@ -417,13 +413,13 @@ const revenueOptions = ref({
   },
   yaxis: {
     labels: {
-      formatter: (val) => `LKR ${val / 1000}k`,
+      formatter: (val) => `${currencyStore.currency} ${val / 1000}k`,
     },
   },
   tooltip: {
     theme: 'dark',
     y: {
-      formatter: (val) => `LKR ${val}`,
+      formatter: (val) => currencyStore.format(val),
     },
   },
   grid: {

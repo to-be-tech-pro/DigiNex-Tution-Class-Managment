@@ -47,7 +47,9 @@
               <div class="text-caption text-green-9 text-uppercase text-weight-bold">
                 Total Revenue (This Month)
               </div>
-              <div class="text-h4 text-weight-bold text-green-9 q-mt-xs">LKR 125,000</div>
+              <div class="text-h4 text-weight-bold text-green-9 q-mt-xs">
+                {{ currencyStore.format(125000) }}
+              </div>
             </q-card>
           </div>
           <div class="col-12 col-md-4">
@@ -55,7 +57,9 @@
               <div class="text-caption text-orange-9 text-uppercase text-weight-bold">
                 Total Pending
               </div>
-              <div class="text-h4 text-weight-bold text-orange-9 q-mt-xs">LKR 45,000</div>
+              <div class="text-h4 text-weight-bold text-orange-9 q-mt-xs">
+                {{ currencyStore.format(45000) }}
+              </div>
             </q-card>
           </div>
         </div>
@@ -167,7 +171,7 @@
                 Total Expenses
               </div>
               <div class="text-h4 text-weight-bold text-red-9 q-mt-xs">
-                LKR {{ totalExpenses.toLocaleString() }}
+                {{ currencyStore.format(totalExpenses) }}
               </div>
             </q-card>
           </div>
@@ -186,7 +190,7 @@
                 class="text-h4 text-weight-bold q-mt-xs"
                 :class="profit >= 0 ? 'text-blue-9' : 'text-orange-9'"
               >
-                LKR {{ profit.toLocaleString() }}
+                {{ currencyStore.format(profit) }}
               </div>
             </q-card>
           </div>
@@ -219,7 +223,13 @@
             label="Month"
             dense
           />
-          <q-input outlined v-model="form.amount" label="Amount (LKR)" type="number" dense />
+          <q-input
+            outlined
+            v-model="form.amount"
+            :label="'Amount (' + currencyStore.currency + ')'"
+            type="number"
+            dense
+          />
           <q-select
             outlined
             v-model="form.status"
@@ -257,8 +267,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { supabase } from 'src/boot/supabase'
+import { useCurrencyStore } from 'stores/currency'
 
 const $q = useQuasar()
+const currencyStore = useCurrencyStore()
 const tab = ref('payments')
 
 // --- PAYMENT TAB LOGIC ---
@@ -268,7 +280,13 @@ const columns = [
   { name: 'date', label: 'Date', field: 'date', align: 'left', sortable: true },
   { name: 'student', label: 'Student', field: 'student', align: 'left', sortable: true },
   { name: 'month', label: 'For Month', field: 'month', align: 'left' },
-  { name: 'amount', label: 'Amount (LKR)', field: 'amount', align: 'right' },
+  {
+    name: 'amount',
+    label: 'Amount',
+    field: 'amount',
+    align: 'right',
+    format: (val) => currencyStore.format(val),
+  },
   { name: 'status', label: 'Status', field: 'status', align: 'center' },
 ]
 
@@ -383,7 +401,13 @@ const dueColumns = [
   { name: 'student', label: 'Student Name', field: 'student', align: 'left' },
   { name: 'grade', label: 'Grade', field: 'grade', align: 'left' },
   { name: 'phone', label: 'Parent Contact', field: 'phone', align: 'left' },
-  { name: 'amount', label: 'Due Amount', field: 'amount', align: 'right' },
+  {
+    name: 'amount',
+    label: 'Due Amount',
+    field: 'amount',
+    align: 'right',
+    format: (val) => currencyStore.format(Number(val.replace(',', ''))),
+  },
   { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
 ]
 const dueRows = ref([
@@ -413,7 +437,13 @@ const expenseColumns = [
   { name: 'date', label: 'Date', field: 'date', align: 'left' },
   { name: 'category', label: 'Category', field: 'category', align: 'left' },
   { name: 'description', label: 'Description', field: 'description', align: 'left' },
-  { name: 'amount', label: 'Amount (LKR)', field: 'amount', align: 'right' },
+  {
+    name: 'amount',
+    label: 'Amount',
+    field: 'amount',
+    align: 'right',
+    format: (val) => currencyStore.format(val),
+  },
 ]
 const expenseRows = ref([
   { id: 1, date: '2026-02-05', category: 'Rent', description: 'Monthly Hall Rent', amount: 50000 },

@@ -8,11 +8,11 @@
         </p>
       </div>
       <!-- Regional Toggle -->
-      <div v-if="countryCode" class="bg-white q-px-md q-py-sm rounded-borders shadow-1">
+      <div class="bg-white q-px-md q-py-sm rounded-borders shadow-1">
         <span class="text-weight-bold text-primary">Region: </span>
-        <span class="text-uppercase">{{
-          countryCode === 'LK' ? 'Sri Lanka (LKR)' : 'International (SEK)'
-        }}</span>
+        <span class="text-uppercase"
+          >{{ currencyStore.countryCode }} ({{ currencyStore.currency }})</span
+        >
       </div>
     </div>
 
@@ -68,7 +68,11 @@
           <q-card-section class="q-pa-lg">
             <div class="text-overline text-blue-9 font-bold">GROWTH</div>
             <div class="text-h4 text-weight-bolder q-mt-sm">
-              {{ countryCode === 'LK' ? '2.5%' : '5%' }}
+              {{
+                currencyStore.countryCode === 'LK' || currencyStore.countryCode === 'SL'
+                  ? '2.5%'
+                  : '5%'
+              }}
               <span class="text-h6 text-grey-6 font-regular">/ txn</span>
             </div>
             <div class="text-caption text-grey-6 q-mb-lg">Pay only when you grow</div>
@@ -121,8 +125,8 @@
           </div>
           <q-card-section class="q-pa-lg">
             <div class="text-overline text-emerald font-bold">PRO</div>
-            <div class="text-h3 text-weight-bolder q-mt-sm font-numeric">
-              {{ countryCode === 'LK' ? 'Rs. 4,500' : '299 SEK' }}
+            <div class="text-h4 text-weight-bolder q-mt-sm font-numeric">
+              {{ currencyStore.format(currencyStore.proPrice) }}
               <span class="text-body2 text-grey-4 font-regular">/ month</span>
             </div>
             <div class="text-caption text-grey-4 q-mb-lg">Unlimited power for large institutes</div>
@@ -177,7 +181,10 @@
               <div class="text-caption">Branch: Colombo 7</div>
               <div class="text-caption">Name: DigyNex Systems</div>
               <div class="text-caption q-mt-sm">
-                Amount: <span class="text-weight-bold">LKR 4,500</span>
+                Amount:
+                <span class="text-weight-bold">{{
+                  currencyStore.format(currencyStore.proPrice)
+                }}</span>
               </div>
             </div>
 
@@ -198,7 +205,9 @@
 
           <!-- International Payment Flow -->
           <div v-else class="q-mt-sm fade-in text-center">
-            <div class="text-h5 text-weight-bold q-mb-md">299 SEK / month</div>
+            <div class="text-h5 text-weight-bold q-mb-md">
+              {{ currencyStore.format(currencyStore.proPrice) }} / month
+            </div>
             <p class="text-grey-6">Secure payment via Stripe.</p>
           </div>
         </q-card-section>
@@ -222,12 +231,12 @@
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { supabase } from 'boot/supabase'
+import { useCurrencyStore } from 'stores/currency'
 
 const $q = useQuasar()
+const currencyStore = useCurrencyStore()
+
 const currentPlan = ref('free')
-const countryCode = ref('LK') // Default strictly to LK logic if unknowns, but will fetch. UI asks for 'SL' usually passed as 'LK' or 'SL' in code.
-// Logic prompt says: "Price (SL): LKR...", "Price (Intl): SEK..."
-// I will treat 'SL', 'LK' as Sri Lanka.
 
 const paymentModal = ref(false)
 const receiptFile = ref(null)
@@ -250,12 +259,6 @@ const proFeatures = [
 ]
 
 onMounted(async () => {
-  // 1. Check LocalStorage for country (set by IndexPage)
-  const storedCountry = localStorage.getItem('user_country')
-  if (storedCountry) {
-    countryCode.value = storedCountry
-  }
-
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser()
@@ -270,7 +273,7 @@ onMounted(async () => {
     if (data) {
       currentPlan.value = data.plan_type || 'free'
       // DB overrides local detection if set
-      if (data.country_code) countryCode.value = data.country_code
+      if (data.country_code) currencyStore.countryCode = data.country_code
     }
   }
 })
@@ -311,7 +314,7 @@ const openPaymentModal = () => {
 const processUpgrade = async () => {
   loading.value = true
   try {
-    if (countryCode.value === 'LK' || countryCode.value === 'SL') {
+    if (currencyStore.countryCode === 'LK' || currencyStore.countryCode === 'SL') {
       // SL Logic (Bank Transfer)
       if (!receiptFile.value) {
         $q.notify({ type: 'warning', message: 'Please upload a receipt.' })
@@ -331,8 +334,8 @@ const processUpgrade = async () => {
 
       const { error } = await supabase.from('payment_proofs').insert({
         user_id: user.value.id,
-        amount: 4500,
-        currency: 'LKR',
+        amount: currencyStore.proPrice,
+        currency: currencyStore.currency,
         receipt_url: receiptUrl,
         status: 'pending', // Admin must approve
       })

@@ -131,7 +131,7 @@
                   <q-card-section class="q-pa-lg">
                     <div class="text-h5 text-weight-bold">Free</div>
                     <div class="text-h4 text-primary q-my-md">
-                      LKR 0 <span class="text-body1 text-grey">/mo</span>
+                      {{ currencyStore.format(0) }} <span class="text-body1 text-grey">/mo</span>
                     </div>
                     <q-separator class="q-my-md" />
                     <q-list dense>
@@ -177,7 +177,8 @@
                   <q-card-section class="q-pa-lg">
                     <div class="text-h5 text-weight-bold">Pro</div>
                     <div class="text-h4 text-white q-my-md">
-                      LKR 4,500 <span class="text-body1 text-blue-2">/mo</span>
+                      {{ currencyStore.format(currencyStore.proPrice) }}
+                      <span class="text-body1 text-blue-2">/mo</span>
                     </div>
                     <q-separator color="blue-4" class="q-my-md" />
                     <q-list dense dark>
@@ -408,8 +409,10 @@
 import { ref } from 'vue'
 import { supabase } from 'boot/supabase'
 import { exportFile, useQuasar } from 'quasar'
+import { useCurrencyStore } from 'stores/currency'
 
 const $q = useQuasar()
+const currencyStore = useCurrencyStore()
 const exporting = ref('')
 
 const tab = ref('general')
@@ -459,7 +462,7 @@ const auditRows = ref([
     date: '2026-02-10 09:45 AM',
     user: 'Manager',
     action: 'Payment',
-    details: 'Collected LKR 2500 from Kasun Perera',
+    details: `Collected ${currencyStore.format(2500)} from Kasun Perera`,
     severity: 'Normal',
   },
   {
