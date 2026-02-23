@@ -134,7 +134,7 @@
               <q-input
                 outlined
                 v-model.number="editingRow.fee"
-                label="Monthly Fee (Rs)"
+                :label="`Monthly Fee (${currencyStore.currency})`"
                 type="number"
                 dense
               />
@@ -170,8 +170,10 @@
 import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { supabase } from 'boot/supabase'
+import { useCurrencyStore } from 'stores/currency'
 
 const $q = useQuasar()
+const currencyStore = useCurrencyStore()
 const editDialog = ref(false)
 const editingRow = ref({})
 const isEditMode = ref(false)
@@ -212,7 +214,14 @@ const columns = [
     field: (row) => `${row.start_time || ''} - ${row.end_time || ''}`,
   },
   { name: 'hall', align: 'left', label: 'Hall', field: 'hall' },
-  { name: 'fee', align: 'right', label: 'Fee (Rs)', field: 'fee', sortable: true },
+  {
+    name: 'fee',
+    align: 'right',
+    label: 'Fee (' + currencyStore.currency + ')',
+    field: 'fee',
+    sortable: true,
+    format: (val) => currencyStore.format(val),
+  },
   { name: 'status', align: 'left', label: 'Status', field: 'status', sortable: true },
   { name: 'actions', align: 'right', label: '', field: 'actions' },
 ]

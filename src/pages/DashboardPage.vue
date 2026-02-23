@@ -348,7 +348,7 @@ import { useCurrencyStore } from 'stores/currency'
 
 const currencyStore = useCurrencyStore()
 
-const stats = ref([
+const stats = computed(() => [
   { label: 'Total Students', value: '1,240', icon: 'school', color: 'blue', trend: 12 },
   { label: 'Total Tutors', value: '45', icon: 'person', color: 'purple', trend: 5 },
   {

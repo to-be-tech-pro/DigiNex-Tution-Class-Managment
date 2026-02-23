@@ -64,7 +64,7 @@
                     Pending Payouts
                   </div>
                   <div class="text-h4 text-weight-bold text-orange-9 q-mt-xs">
-                    Rs {{ totalPendingPayouts.toLocaleString() }}
+                    {{ currencyStore.format(totalPendingPayouts) }}
                   </div>
                 </div>
                 <q-avatar color="orange-1" text-color="orange-8" icon="payments" />
@@ -79,7 +79,7 @@
                     Paid This Month
                   </div>
                   <div class="text-h4 text-weight-bold text-green-9 q-mt-xs">
-                    Rs {{ totalPaidMonth.toLocaleString() }}
+                    {{ currencyStore.format(totalPaidMonth) }}
                   </div>
                 </div>
                 <q-avatar color="green-1" text-color="green-8" icon="check_circle" />
@@ -367,9 +367,9 @@
         </q-card-section>
         <q-card-section class="q-pt-none">
           Are you sure you want to process a payment of
-          <span class="text-weight-bold text-primary"
-            >Rs {{ selectedPayment?.payableAmount.toLocaleString() }}</span
-          >
+          <span class="text-weight-bold text-primary">{{
+            currencyStore.format(selectedPayment?.payableAmount)
+          }}</span>
           to {{ selectedPayment?.tutorName }}?
         </q-card-section>
         <q-card-actions align="right">
@@ -390,8 +390,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
+import { useCurrencyStore } from 'stores/currency'
 
 const $q = useQuasar()
+const currencyStore = useCurrencyStore()
 const tab = ref('overview')
 
 // --- LIST OF TUTORS ---
@@ -496,10 +498,9 @@ const paymentColumns = [
   { name: 'tutorName', label: 'Tutor', field: 'tutorName', align: 'left', sortable: true },
   { name: 'totalClasses', label: 'Classes Taught', field: 'totalClasses', align: 'center' },
   {
-    name: 'totalCollected',
-    label: 'Fees Collected (Rs)',
+    label: `Fees Collected (${currencyStore.currency})`,
     field: 'totalCollected',
-    format: (val) => val.toLocaleString(),
+    format: (val) => currencyStore.format(val),
     align: 'right',
   },
   {
@@ -510,9 +511,9 @@ const paymentColumns = [
   },
   {
     name: 'payableAmount',
-    label: 'Net Payable (Rs)',
+    label: `Net Payable (${currencyStore.currency})`,
     field: 'payableAmount',
-    format: (val) => val.toLocaleString(),
+    format: (val) => currencyStore.format(val),
     align: 'right',
     style: 'font-weight: bold; color: var(--q-primary)',
   },
@@ -525,14 +526,14 @@ const payoutHistory = ref([
     id: 1,
     date: '2026-01-28',
     tutor: 'Ms. Deepika Gunawardena',
-    amount: 'Rs 52,000',
+    amount: 52000,
     status: 'Completed',
   },
   {
     id: 2,
     date: '2026-01-25',
     tutor: 'Mr. Sarath Mel',
-    amount: 'Rs 88,500',
+    amount: 88500,
     status: 'Completed',
   },
 ])
@@ -540,7 +541,13 @@ const payoutHistory = ref([
 const payoutHistoryColumns = [
   { name: 'date', label: 'Date', field: 'date', align: 'left' },
   { name: 'tutor', label: 'Tutor', field: 'tutor', align: 'left' },
-  { name: 'amount', label: 'Amount', field: 'amount', align: 'right' },
+  {
+    name: 'amount',
+    label: 'Amount',
+    field: 'amount',
+    align: 'right',
+    format: (val) => currencyStore.format(val),
+  },
   { name: 'status', label: 'Status', field: 'status', align: 'right' },
 ]
 
@@ -579,13 +586,13 @@ const confirmPayment = () => {
         id: Date.now(),
         date: new Date().toISOString().split('T')[0],
         tutor: selectedPayment.value.tutorName,
-        amount: 'Rs ' + selectedPayment.value.payableAmount.toLocaleString(),
+        amount: selectedPayment.value.payableAmount,
         status: 'Completed',
       })
 
       $q.notify({
         type: 'positive',
-        message: `Payment of Rs ${selectedPayment.value.payableAmount.toLocaleString()} recorded!`,
+        message: `Payment of ${currencyStore.format(selectedPayment.value.payableAmount)} recorded!`,
       })
     }
   }

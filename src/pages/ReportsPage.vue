@@ -37,7 +37,7 @@
         <q-card class="no-shadow border-gray q-pa-md bg-orange-1 text-orange-9">
           <div class="text-caption text-uppercase text-weight-bold">Monthly Income</div>
           <div class="text-h4 text-weight-bold q-mt-xs">
-            Rs. {{ monthlyIncome.toLocaleString() }}
+            {{ currencyStore.format(monthlyIncome) }}
           </div>
         </q-card>
       </div>
@@ -45,7 +45,7 @@
         <q-card class="no-shadow border-gray q-pa-md bg-red-1 text-red-9">
           <div class="text-caption text-uppercase text-weight-bold">Outstanding Dues</div>
           <div class="text-h4 text-weight-bold q-mt-xs">
-            Rs. {{ outstandingAmount.toLocaleString() }}
+            {{ currencyStore.format(outstandingAmount) }}
           </div>
         </q-card>
       </div>
@@ -81,7 +81,9 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from 'boot/supabase'
 import VueApexCharts from 'vue3-apexcharts'
+import { useCurrencyStore } from 'stores/currency'
 
+const currencyStore = useCurrencyStore()
 const apexchart = VueApexCharts
 
 const loading = ref(false)
@@ -113,7 +115,7 @@ const chartOptions = ref({
   xaxis: { categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'] },
   colors: ['#34D399', '#EF4444'],
   fill: { opacity: 1 },
-  tooltip: { y: { formatter: (val) => 'Rs. ' + val } },
+  tooltip: { y: { formatter: (val) => currencyStore.format(val) } },
 })
 
 const donutSeries = ref([])
